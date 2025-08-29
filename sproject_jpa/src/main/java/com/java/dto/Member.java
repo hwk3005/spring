@@ -15,24 +15,24 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor		// 전체생성자
-@NoArgsConstructor		// 기본생성자
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Member {
-
-	@Id		// primary key 등록
+	
+	@Id //primary key 등록
 	private String id;
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false,length = 100)
 	private String pw;
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false,length = 100)
 	private String name;
 	@Column(length = 20)
 	private String phone;
-	@ColumnDefault(" '남자' ")	// "0"
+	@ColumnDefault(" '남자' ")  //"0"
 	private String gender;
 	@Column(length = 100)
 	private String hobby;
-	@CreationTimestamp		// sysdate 입력됨.
+	@CreationTimestamp //sysdate 입력됨.
 	private Timestamp mdate;
-	
+
 }

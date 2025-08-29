@@ -23,13 +23,14 @@
 <script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/js/idangerous.swiper-2.1.min.js"></script>
 <script type="text/javascript" src="/js/jquery.anchor.js"></script>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="/js/html5.js"></script>
-<script type="text/javascript" src="/js/respond.min.js"></script>
-<![endif]-->
 <script type="text/javascript">
-	if("${flag}" == "-1") alert("게시글이 삭제 되었습니다.");
-	if("${flag}" == "1") alert("게시글이 등록 되었습니다.");
+	//게시글 삭제
+	function deleteBtn(){
+		if(confirm("${board.bno} 번 게시글을 삭제하시겠습니까?")){
+			location.href="/customer/delete?bno=${board.bno}";
+		}
+	}
+
 </script>
 </head>
 <body>
@@ -91,9 +92,7 @@
 	<div id="header">
 		
 		<div id="snbBox">
-			<a href="/">
-				<h1><img src="/images/txt/logo.gif" alt="JARDIN SHOP" /></h1>
-			</a>
+			<h1><img src="/images/txt/logo.gif" alt="JARDIN SHOP" /></h1>
 			<div id="quickmenu">
 				<div id="mnaviOpen"><img src="/images/btn/btn_mnavi.gif" width="33" height="31" alt="메뉴열기" /></div>
 				<div id="mnaviClose"><img src="/images/btn/btn_mnavi_close.gif" width="44" height="43" alt="메뉴닫기" /></div>
@@ -213,88 +212,82 @@
 			<div id="contents">
 				<div id="customer">
 					<h2><strong>NOTICE</strong><span>쟈뎅샵 소식을 전해드립니다.</span></h2>
-					
-					<div class="orderDivMt">
-						<table summary="NO, 제목, 등록일, 조회수 순으로 공지사항을 조회 하실수 있습니다." class="orderTable2" border="1" cellspacing="0">
-							<caption>공지사항 보기</caption>
-							<colgroup>
-							<col width="10%" class="tnone" />
-							<col width="*" />
-							<col width="14%" class="tw25" />
-							<col width="14%" class="tw25" />
-							<col width="14%" class="tnone" />
-							</colgroup>
-							<thead>
-								<th scope="col" class="tnone">NO.</th>
-								<th scope="col">제목</th>
-								<th scope="col">작성자</th>
-								<th scope="col">작성일</th>
-								<th scope="col" class="tnone">조회수</th>
-							</thead>
-							<tbody>
-								<c:forEach var="board" items="${list}">
-								<tr>
-									<td class="tnone">${board.bno}</td>
-									<td class="left">
-										<a href="/customer/view?bno=${board.bno}">${board.btitle}</a>
-										<img src="/images/ico/ico_new.gif" alt="NEW" />
-									</td>
-									<td>${board.member.name }</td>
-									<td>
-									  <fmt:formatDate value="${board.bdate}" pattern="yyyy-MM-dd"/>
-									</td>
-									<td class="tnone right">${board.bhit}</td>
-								</tr>
-								</c:forEach>
 
+					<div class="viewDivMt">
+						<div class="viewHead">
+							<div class="subject">
+								<ul>
+									<li>${board.btitle}</li>
+								</ul>
+							</div>
+							<div class="day">
+								<p class="txt">작성자
+								<span>${board.member.name}</span>
+								</p>
+							</div>
+							<div class="day">
+								<p class="txt">작성일
+								<span>
+									<fmt:formatDate value="${board.bdate}" pattern="yyyy.MM.dd"/>
+								</span>
+								</p>
+							</div>
+						</div>
+
+						<div class="viewContents">
+							${board.bcontent }
+							<br/><br/>
+
+							감사합니다.
+						</div>
+					</div>
+
+
+					<!-- 이전다음글 -->
+					<div class="pnDiv web">
+						<table summary="이전다음글을 선택하여 보실 수 있습니다." class="preNext" border="1" cellspacing="0">
+							<caption>이전다음글</caption>
+							<colgroup>
+							<col width="100px" />
+							<col width="*" />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th class="pre">PREV</th>
+									<td><a href="#">상품 재입고는 언제 되나요?</a></td>
+								</tr>
+
+								<tr>
+									<th class="next">NEXT</th>
+									<td>다음 글이 없습니다.</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
-						
+					<!-- //이전다음글 -->
 
 
-					<div class="btnAreaList">
-					    <div class="bwright">
+					<!-- Btn Area -->
+					<div class="btnArea btline">
+						<div class="bRight">
 							<ul>
-								<li><a href="/customer/write" class="sbtnMini">글쓰기</a></li>
-							</ul>
-						</div>
-						<!-- 페이징이동1 -->
-						<div class="allPageMoving1">
-
-						<a href="#" class="n"><img src="/images/btn/btn_pre2.gif" alt="처음으로"/></a><a href="#" class="pre"><img src="/images/btn/btn_pre1.gif" alt="앞페이지로"/></a>
-						<strong>1</strong>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#">4</a>
-						<a href="#">5</a>
-						<a href="#" class="next"><img src="/images/btn/btn_next1.gif" alt="뒤페이지로"/></a><a href="#" class="n"><img src="/images/btn/btn_next2.gif" alt="마지막페이지로"/></a>
-
-						</div>
-						<!-- //페이징이동1 -->
-					</div>
-
-					<div class="searchWrap">
-						<div class="search">
-							<ul>
-								<li class="web"><img src="/images/txt/txt_search.gif" alt="search" /></li>
-								<li class="se">
-									<select>
-										<option value="" />제목</option>
-									</select>
-								</li>
-								<li><input type="text" class="searchInput" /></li>
-								<li class="web"><a href="#"><img src="/images/btn/btn_search.gif" alt="검색" /></a></li>
-								<li class="mobile"><a href="#"><img src="/images/btn/btn_search_m.gif" alt="검색" /></a></li>
+							    <c:if test="${session_id != null }">
+									<li><a href="/customer/list" class="sbtnMini mw">답변달기</a></li>
+									<c:if test="${session_id == board.member.id }">
+										<li><a href="/customer/list" class="sbtnMini mw">수정</a></li>
+										<li><a onclick="deleteBtn()" class="sbtnMini mw">삭제</a></li>
+									</c:if>
+							    </c:if>
+								<li><a href="/customer/list" class="sbtnMini mw">목록</a></li>
 							</ul>
 						</div>
 					</div>
-					<!-- //포토 구매후기 -->
-
-
+					<!-- //Btn Area -->
+					
 				</div>
 			</div>
 			<!-- //contents -->
+
 
 		</div>
 	</div>
