@@ -1,6 +1,7 @@
 package com.java.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +18,8 @@ public interface CustomerService {
 	//게시글 전체가져오기 - 정렬 : bgroup역순정렬, bstep순차정렬
 	List<Board> findAll(Sort sort);
 
-	//게시글 1개 가져오기
-	Board findByBno(int bno);
+	//게시글 1개 가져오기 - board,preBoard,nextBoard
+	Map<String, Object> findByBno(int bno);
 
 	//게시글 삭제
 	void deleteById(int bno);
@@ -29,5 +30,13 @@ public interface CustomerService {
 	//답변달기 저장
 	void reply(Board b);
 
+	// 게시글 검색 - 제목
+	Page<Board> findByBtitleContaining(String search, Pageable pageable);
+	// 게시글 검색 - 내용
+	Page<Board> findByBcontentContaining(String search, Pageable pageable);
+	// 게시글 검색 - 전체
+	Page<Board> findByBtitleContainingOrBcontentContaining(String search,String search2, Pageable pageable);
+
 
 }
+

@@ -1,7 +1,9 @@
 package com.java.service;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+@Transactional
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -40,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Board findByBno(int bno) {
+	public Map<String, Object> findByBno(int bno) {
 		// 조회수 1증가
 		customerRepository.updateHit(bno);
 		// .get():에러처리안함 .orElseGet():빈객체처리 .roElseThrow():예외처리
@@ -49,7 +52,15 @@ public class CustomerServiceImpl implements CustomerService {
 			return new IllegalArgumentException("해당되는 게시글이 존재하지 않습니다."); 
 		 }
 		);
-		return board;
+		// 이전글
+		Board preBoard = customerRepository.findPreBoard(bno);
+		// 다음글
+		Board nextBoard = customerRepository.findNextBoard(bno);
+		Map<String, Object> map = new HashMap<>();
+		map.put("board", board);
+		map.put("preBoard", preBoard);
+		map.put("nextBoard", nextBoard);
+		return map;
 	}
 
 	@Override //게시글삭제
@@ -93,6 +104,23 @@ public class CustomerServiceImpl implements CustomerService {
 		b.setBindent(b.getBindent()+1);
 		customerRepository.save(b);
 		
+	}
+
+
+	@Override //게시글 검색 - 제목
+	public Page<Board> findByBtitleContaining(String search, Pageable pageable) {
+		Page<Board> pageList = customerRepository.findByBtitleContaining(search,pageable);
+		return pageList;
+	}
+	@Override //게시글 검색 - 내용
+	public Page<Board> findByBcontentContaining(String search, Pageable pageable) {
+		Page<Board> pageList = customerRepository.findByBcontentContaining(search,pageable);
+		return pageList;
+	}
+	@Override //게시글 검색 - 전체
+	public Page<Board> findByBtitleContainingOrBcontentContaining(String search,String search2, Pageable pageable) {
+		Page<Board> pageList = customerRepository.findByBtitleContainingOrBcontentContaining(search,search,pageable);
+		return pageList;
 	}
 
 	

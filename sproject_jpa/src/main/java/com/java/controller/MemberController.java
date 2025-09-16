@@ -4,9 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.java.dto.Member;
+import com.java.service.EmailService;
+import com.java.service.EmailServiceImpl;
 import com.java.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +19,31 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MemberController {
 
+    private final EmailServiceImpl emailServiceImpl;
+
 	@Autowired MemberService memberService;
+	@Autowired EmailService emailService; // 이메일 발송
 	@Autowired HttpSession session;
+
+    MemberController(EmailServiceImpl emailServiceImpl) {
+        this.emailServiceImpl = emailServiceImpl;
+    }
+	
+	@GetMapping("/member/step01") //회원가입 - step01
+	public String step01() {
+		return "/member/step01";
+	}
+	
+	@ResponseBody
+	@PostMapping("/member/emailSend") //email인증
+	public String emailSend(@RequestParam("email") String email) {
+		System.out.println("email : "+email);
+		// 이메일전송 구현
+		emailService.emailSend(email);
+		
+		
+		return "success";
+	}
 	
 	@GetMapping("/member/login") //로그인페이지 열기
 	public String login() {
